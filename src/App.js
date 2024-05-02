@@ -1,10 +1,11 @@
 import React from 'react';
-import JobCard from './JobCard';
 import JobListings from './JobDisplay';
+import JobFilters from './compoents/JobFilters';
 
 const App = () => {
   return (
     <div>
+      <JobFilters />
      <JobListings />
     </div>
   )

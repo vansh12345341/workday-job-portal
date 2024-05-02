@@ -1,0 +1,47 @@
+.job-filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #ccc; 
+    background-color: #fff;
+    border-radius: 4px; 
+  }
+  
+  .filter {
+    margin: 0 8px;
+    position: relative;
+  }
+  
+  .filter label {
+    display: block;
+    font-size: 12px; 
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  .filter select,
+  .filter input {
+    width: 150px; 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .filter select:focus,
+  .filter input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  @media (max-width: 768px) {
+    .job-filters {
+      flex-direction: column;
+    }
+    
+    .filter {
+      margin-bottom: 8px;
+    }
+  }
+  

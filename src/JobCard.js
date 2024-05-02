@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import './JobCard.css';
 
 export default function JobCard({ job }) {
   const [expanded, setExpanded] = useState(false);
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
