@@ -11,48 +11,13 @@ const JobListings = () => {
   const [offset, setOffset] = useState(0);
   const observer = useRef(null);
   const lastElementRef = useRef(); 
-  const viewportSize = 10;  // Adjust based on your layout
 
   const roleFilter = useSelector(state => state.roleFilter);
   const experienceFilter = useSelector(state => state.experienceFilter);
   const companyNameFilter = useSelector(state => state.companyNameFilter);
   const minimumBasePayFilter = useSelector(state => state.minimumBasePayFilter);
 
-  const fetchJobs = useCallback(() => {
-    if (!loading && hasMore) {
-      setLoading(true);
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      const raw = JSON.stringify({ "limit": 100, "offset": offset });
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-      };
-
-      fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions)
-        .then(response => response.json())
-        .then(data => {
-          const newData = data.jdList.map(job => ({
-            ...job,
-            minExp: job.minExp ? parseInt(job.minExp, 10) : 2
-          }));
-          setAllJobs(prev => [...prev, ...newData]);
-          setHasMore(data.jdList.length === 100);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error('Error fetching jobs:', error);
-          setLoading(false);
-        });
-    }
-  }, [offset, loading, hasMore]);
-
-  useEffect(() => {
-    fetchJobs();
-  }, [fetchJobs]);
-
+  
  useEffect(() => {
     const filteredJobs = allJobs.filter(job => {
       const roleMatches = roleFilter.length > 0 ? roleFilter.includes(job.jobRole) : true;
@@ -63,10 +28,46 @@ const JobListings = () => {
     });
     setJobs(filteredJobs);
 
-    if (filteredJobs.length < viewportSize && hasMore && !loading) {
-      setOffset(allJobs.length); 
+  }, [roleFilter, experienceFilter, minimumBasePayFilter, companyNameFilter, allJobs]);
+
+  useEffect(() => {
+    setLoading(true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const raw = JSON.stringify({ "limit": 100, "offset": offset });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+
+    fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        const newData = data.jdList.map(job => ({
+          ...job,
+          minExp: job.minExp ? parseInt(job.minExp, 10) : 2
+        }));
+        setAllJobs(prev => [...prev, ...newData]);
+        setJobs(prev => [...prev, ...newData]);
+        setHasMore(data.jdList.length === 100);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching jobs:', error);
+        setLoading(false);
+      });
+  }, [offset]);
+
+  useEffect(() => {
+    if (jobs.length ) {
+      observer.current.unobserve(lastElementRef.current);
+      if (lastElementRef.current) {
+        observer.current.observe(lastElementRef.current);
+      }
     }
-  }, [roleFilter, experienceFilter, minimumBasePayFilter, companyNameFilter, allJobs, loading, hasMore]);
+  }, [jobs]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(entries => {
@@ -83,6 +84,7 @@ const JobListings = () => {
       if (observer.current) observer.current.disconnect();
     };
   }, [loading, hasMore, lastElementRef]);
+
 
   return (
     <Grid container spacing={2}>
