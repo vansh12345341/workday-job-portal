@@ -12,6 +12,10 @@
     margin: 0 8px;
     position: relative;
   }
+  .company{
+    margin-top: 11px;
+    padding-top: 8px;
+  }
   
   .filter label {
     display: block;

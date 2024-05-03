@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import JobModal from './compoents/modal/JobModal';
 import './JobCard.css';
 
-export default function JobCard({ job }) {
-  const [expanded, setExpanded] = useState(false);
+export default function JobCard({ job }) { 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
-
   let minSalary = job.minJdSalary;
   let maxSalary = job.maxJdSalary;
 
@@ -27,10 +26,10 @@ export default function JobCard({ job }) {
       <div className="card-content">
         <div className="header">
           <div className="logo">
-            <img src="https://storage.googleapis.com/weekday-assets/airtableAttachment_1713846224941_fab2j.jpg" alt="logo" />
+            <img src={job.logoUrl} alt="logo" />
           </div>
           <div className="job-info">
-            <span className="company-name">Endor</span>
+            <span className="company-name">{job.companyName}</span>
             <span className="job-title">{job.jobRole}</span>
             <span className="job-location">{job.location}</span>
           </div>
@@ -40,10 +39,10 @@ export default function JobCard({ job }) {
         <div className="about-company">
            About us:
           <p>{job.jobDetailsFromCompany}</p>
-          {!expanded && <div className="gradient" ></div>}
+          <div className="gradient" ></div>
         </div>
         <div className="actions">
-          <button onClick={handleExpandClick} className="view-job">View Job</button>
+          <button onClick={toggleModal} className="view-job">View Job</button>
         </div>
         <div class="info-container"> 
         <div class="title">Minimum Experience</div>
@@ -53,6 +52,7 @@ export default function JobCard({ job }) {
         <button className="easy-apply">⚡ Easy Apply</button>
         </div>
       </div>
+      <JobModal job={job} isOpen={isModalOpen} onClose={toggleModal} />
     </div>
   );
 }

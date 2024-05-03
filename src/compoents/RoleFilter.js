@@ -1,26 +1,40 @@
 import React from 'react';
+import Select from 'react-select';
 import { useDispatch } from 'react-redux';
-import { setRoleFilter, setExperienceFilter } from '../redux/actions';
-
+import { setRoleFilter } from '../redux/actions';
 
 export const RoleFilter = ({ onFilterChange }) => {
   const dispatch = useDispatch();
+  const options = [
+    { value: 'frontend', label: 'Frontend' },
+    { value: 'backend', label: 'Backend' },
+    { value: 'fullstack', label: 'Fullstack' },
+    { value: 'python', label: 'Python' },
+    { value: 'ios', label: 'iOS' },
+    { value: 'android', label: 'Android' }
+  ];
 
-  const handleChange = (e) => {
-    dispatch(setRoleFilter( e.target.value));
+  const handleChange = (selectedOptions) => {
+    const values = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    console.log("values", values);
+    dispatch(setRoleFilter(values)); 
+    if (onFilterChange) {
+      onFilterChange(values);
+    }
   };
 
   return (
     <div className="filter">
       <label htmlFor="role">Roles</label>
-      <select id="role" onChange={handleChange}>
-        <option value="">Select Role</option>
-        <option value="frontend">Frontend</option>
-        <option value="backend">Backend</option>
-        <option value="fullstack">Fullstack</option>
-        <option value="fullstack">Python</option>
-        
-      </select>
+      <Select
+        id="role"
+        isMulti
+        options={options}
+        className="basic-multi-select"
+        classNamePrefix="select"
+        onChange={handleChange}
+        placeholder="Select Role(s)"
+      />
     </div>
   );
 };

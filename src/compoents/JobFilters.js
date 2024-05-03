@@ -2,13 +2,17 @@ import React from 'react';
 import './JobFilter.css';
 import { RoleFilter } from './RoleFilter';
 import { ExperienceFilter } from './ExperienceFilter';
+import { CompanyNameFilter } from './CompanyFilter';
+import { MinimumBasePayFilter } from './MinimumBasePayFilter';
 
 
-const JobFilters = ({ onFilterChange }) => {
+const JobFilters = () => {
   return (
     <form className="job-filters" onSubmit={e => e.preventDefault()}>
-      <RoleFilter onFilterChange={onFilterChange} />
-      <ExperienceFilter onFilterChange={onFilterChange} />
+      <RoleFilter />
+      <ExperienceFilter  />
+      <MinimumBasePayFilter/>
+      <CompanyNameFilter />
     </form>
   );
 };

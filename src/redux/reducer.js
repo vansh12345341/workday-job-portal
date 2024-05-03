@@ -1,10 +1,10 @@
-// reducers.js
-
-import { SET_ROLE_FILTER, SET_EXPERIENCE_FILTER } from './actions';
+import { SET_ROLE_FILTER, SET_EXPERIENCE_FILTER, SET_COMPANY_NAME_FILTER , SET_MINIMUM_BASE_PAY_FILTER} from './actions';
 
 const initialState = {
   roleFilter: '',
   experienceFilter: '',
+  companyNameFilter: '',
+  minimumBasePayFilter: ''
 };
 
 const jobFiltersReducer = (state = initialState, action) => {
@@ -18,6 +18,16 @@ const jobFiltersReducer = (state = initialState, action) => {
       return {
         ...state,
         experienceFilter: action.payload,
+      };
+      case SET_COMPANY_NAME_FILTER:
+      return {
+        ...state,
+        companyNameFilter: action.payload
+      };
+      case SET_MINIMUM_BASE_PAY_FILTER:
+      return {
+        ...state,
+        minimumBasePayFilter: action.payload
       };
     default:
       return state;

@@ -6,7 +6,9 @@ const App = () => {
   return (
     <div>
       <JobFilters />
-     <JobListings />
+      <div style={{ marginLeft: '20px', paddingLeft: '20px' ,marginTop:'20px'}}>
+        <JobListings />
+      </div>
     </div>
   )
 }

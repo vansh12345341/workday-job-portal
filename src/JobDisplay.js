@@ -6,21 +6,24 @@ import { Grid } from '@mui/material';
 const JobListings = () => {
   const [jobs, setJobs] = useState([]);
   const [allJobs, setAllJobs] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
   const observer = useRef(null);
   const lastElementRef = useRef(); 
 
-  const roleFilter = useSelector(state => state.roleFilter);
-  const experienceFilter = useSelector(state => state.experienceFilter);
+  const filters = useSelector(state => ({
+    roleFilter: state.roleFilter,
+    experienceFilter: state.experienceFilter,
+    companyNameFilter: state.companyNameFilter,
+    minimumBasePayFilter: state.minimumBasePayFilter
+  }));
 
   useEffect(() => {
     setLoading(true);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    const raw = JSON.stringify({ "limit": 100, "offset": offset });
+    const raw = JSON.stringify({ "limit": 50, "offset": offset });
 
     const requestOptions = {
       method: "POST",
@@ -44,16 +47,19 @@ const JobListings = () => {
         console.error('Error fetching jobs:', error);
         setLoading(false);
       });
-  }, [offset]);
+  }, [offset, filters]);
 
+  console.log("jobs", allJobs);
   useEffect(() => {
     const filteredJobs = allJobs.filter(job => {
-      const roleMatches = roleFilter ? job.jobRole === roleFilter : true;
-      const experienceMatches = experienceFilter ? job.minExp >= parseInt(experienceFilter, 10) : true;
-      return roleMatches && experienceMatches;
+      const roleMatches = filters.roleFilter.length > 0 ? filters.roleFilter.includes(job.jobRole) : true;
+      const experienceMatches = filters.experienceFilter ? job.minExp >= parseInt(filters.experienceFilter, 10) : true;
+      const companyMatches = filters.companyNameFilter ? job.companyName.toLowerCase().includes(filters.companyNameFilter.toLowerCase()) : true;
+      const basePayMatches = filters.minimumBasePayFilter ? job.minJdSalary >= parseInt(filters.minimumBasePayFilter, 10) : true;
+      return roleMatches && experienceMatches && companyMatches && basePayMatches;
     });
     setJobs(filteredJobs);
-  }, [roleFilter, experienceFilter, allJobs]);
+  }, [filters, allJobs]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(entries => {

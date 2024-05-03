@@ -1,34 +1,41 @@
 import React from 'react';
+import Select from 'react-select';
 import { useDispatch } from 'react-redux';
-import { setRoleFilter, setExperienceFilter } from '../redux/actions';
+import { setExperienceFilter } from '../redux/actions';
 
-
-
-export const ExperienceFilter = ({ onFilterChange }) => {
+export const ExperienceFilter = () => {
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    console.log("experience", e.target.value)
-    dispatch(setExperienceFilter(e.target.value));    
+  const options = [
+    { value: '1', label: '1 year' },
+    { value: '2', label: '2 years' },
+    { value: '3', label: '3 years' },
+    { value: '4', label: '4 years' },
+    { value: '5', label: '5 years' },
+    { value: '6', label: '6 years' },
+    { value: '7', label: '7 years' },
+    { value: '8', label: '8 years' },
+    { value: '9', label: '9 years' },
+    { value: '10', label: '10 years' },
+  ];
+
+  const handleChange = selectedOption => {
+    dispatch(setExperienceFilter(selectedOption ? selectedOption.value : ''));
   };
 
   return (
     <div className="filter">
       <label htmlFor="experience">Min Experience</label>
-      <select id="experience" onChange={handleChange}>
-        <option value="">Select Experience</option>
-        <option value="1">1 year</option>
-        <option value="2">2 year</option>
-        <option value="3">3 year</option>
-        <option value="4">4 year</option>
-        <option value="5">5 year</option>
-        <option value="6">6 year</option>
-        <option value="7">7 year</option>
-        <option value="8">8 year</option>
-        <option value="9">9 year</option>
-        <option value="10">10 year</option>
-        
-      </select>
+      <Select
+        id="experience"
+        options={options}
+        onChange={handleChange}
+        placeholder="Select Experience"
+        className="basic-single"
+        classNamePrefix="select"
+        isClearable
+        isSearchable
+      />
     </div>
   );
 };
