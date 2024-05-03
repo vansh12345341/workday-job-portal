@@ -28,9 +28,9 @@ export default function JobCard({ job }) {
             <img src={job.logoUrl} alt="logo" />
           </div>
           <div class="job-info">
-            <span class="company-name">{job.companyName}</span>
-            <span class="job-title">{job.jobRole}</span>
-            <span class="job-location">{job.location}</span>
+            <div class="company-name">{job.companyName}</div>
+            <div class="job-title">{job.jobRole}</div>
+            <p class="job-location">{job.location}</p>
           </div>
         </div>
         <p class="salary">Estimated Salary: ₹{minSalary} - {maxSalary} LPA</p>

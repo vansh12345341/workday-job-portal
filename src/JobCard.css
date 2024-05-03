@@ -1,7 +1,7 @@
 .card {
     max-width: 345px;
     margin: 8px;
-    height: 600px;
+    height: 610px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     border-radius: 16px;
     position: relative;
@@ -26,9 +26,9 @@
     margin-left: 10px;
     margin-bottom: 5px;
   }
-  .job-info span {
+  .job-info div {
     display: block;
-    padding-left: 8px;
+    padding-left: 15px;
   }
   
   .experience {
@@ -50,7 +50,7 @@
     position: relative;
     max-height: 18em;
     overflow: hidden;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     font-size: 1rem;
     font-weight: 400;
   }
@@ -76,7 +76,7 @@
   .view-job{
     position: relative;
     font-weight: 500;
-    padding-bottom: 55px;
+    padding-bottom: 58px;
   }
   
   .view-job, .easy-apply {
@@ -97,3 +97,33 @@
     margin: 4px;
   }
   
+  .title{
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    color: #8b8b8b;
+  }
+
+  .value{
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .company-name{
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    padding-top: 6px;
+    color: #8b8b8b;
+  }
+
+  .job-title{
+    font-size: 18px;
+    line-height: 1;
+  }
+  .job-location{
+    font-size: 12px;
+    margin-left: 15px;
+  }
