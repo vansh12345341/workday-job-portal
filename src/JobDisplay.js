@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import JobCard from './JobCard';
 import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
@@ -11,55 +11,62 @@ const JobListings = () => {
   const [offset, setOffset] = useState(0);
   const observer = useRef(null);
   const lastElementRef = useRef(); 
+  const viewportSize = 10;  // Adjust based on your layout
 
-  const filters = useSelector(state => ({
-    roleFilter: state.roleFilter,
-    experienceFilter: state.experienceFilter,
-    companyNameFilter: state.companyNameFilter,
-    minimumBasePayFilter: state.minimumBasePayFilter
-  }));
+  const roleFilter = useSelector(state => state.roleFilter);
+  const experienceFilter = useSelector(state => state.experienceFilter);
+  const companyNameFilter = useSelector(state => state.companyNameFilter);
+  const minimumBasePayFilter = useSelector(state => state.minimumBasePayFilter);
+
+  const fetchJobs = useCallback(() => {
+    if (!loading && hasMore) {
+      setLoading(true);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({ "limit": 100, "offset": offset });
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+      };
+
+      fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions)
+        .then(response => response.json())
+        .then(data => {
+          const newData = data.jdList.map(job => ({
+            ...job,
+            minExp: job.minExp ? parseInt(job.minExp, 10) : 2
+          }));
+          setAllJobs(prev => [...prev, ...newData]);
+          setHasMore(data.jdList.length === 100);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching jobs:', error);
+          setLoading(false);
+        });
+    }
+  }, [offset, loading, hasMore]);
 
   useEffect(() => {
-    setLoading(true);
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const raw = JSON.stringify({ "limit": 50, "offset": offset });
+    fetchJobs();
+  }, [fetchJobs]);
 
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-    };
-
-    fetch("https://api.weekday.technology/adhoc/getSampleJdJSON", requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        const newData = data.jdList.map(job => ({
-          ...job,
-          minExp: job.minExp ? parseInt(job.minExp, 10) : 2
-        }));
-        setAllJobs(prev => [...prev, ...newData]);
-        setJobs(prev => [...prev, ...newData]);
-        setHasMore(data.jdList.length === 100);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching jobs:', error);
-        setLoading(false);
-      });
-  }, [offset, filters]);
-
-  console.log("jobs", allJobs);
-  useEffect(() => {
+ useEffect(() => {
     const filteredJobs = allJobs.filter(job => {
-      const roleMatches = filters.roleFilter.length > 0 ? filters.roleFilter.includes(job.jobRole) : true;
-      const experienceMatches = filters.experienceFilter ? job.minExp >= parseInt(filters.experienceFilter, 10) : true;
-      const companyMatches = filters.companyNameFilter ? job.companyName.toLowerCase().includes(filters.companyNameFilter.toLowerCase()) : true;
-      const basePayMatches = filters.minimumBasePayFilter ? job.minJdSalary >= parseInt(filters.minimumBasePayFilter, 10) : true;
+      const roleMatches = roleFilter.length > 0 ? roleFilter.includes(job.jobRole) : true;
+      const experienceMatches =  experienceFilter ? job.minExp >= parseInt(experienceFilter, 10) : true;
+      const companyMatches = companyNameFilter ? job.companyName.toLowerCase().includes(companyNameFilter.toLowerCase()) : true;
+      const basePayMatches = minimumBasePayFilter ? job.minJdSalary >= parseInt(minimumBasePayFilter, 10) : true;
       return roleMatches && experienceMatches && companyMatches && basePayMatches;
     });
     setJobs(filteredJobs);
-  }, [filters, allJobs]);
+
+    if (filteredJobs.length < viewportSize && hasMore && !loading) {
+      setOffset(allJobs.length); 
+    }
+  }, [roleFilter, experienceFilter, minimumBasePayFilter, companyNameFilter, allJobs, loading, hasMore]);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(entries => {

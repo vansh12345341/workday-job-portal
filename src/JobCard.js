@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import JobModal from './compoents/modal/JobModal';
 import './JobCard.css';
 
@@ -22,26 +21,26 @@ export default function JobCard({ job }) {
   }
 
   return (
-    <div className="card">
-      <div className="card-content">
-        <div className="header">
-          <div className="logo">
+    <div class="card">
+      <div class="card-content">
+        <div class="header">
+          <div class="logo">
             <img src={job.logoUrl} alt="logo" />
           </div>
-          <div className="job-info">
-            <span className="company-name">{job.companyName}</span>
-            <span className="job-title">{job.jobRole}</span>
-            <span className="job-location">{job.location}</span>
+          <div class="job-info">
+            <span class="company-name">{job.companyName}</span>
+            <span class="job-title">{job.jobRole}</span>
+            <span class="job-location">{job.location}</span>
           </div>
         </div>
-        <p className="salary">Estimated Salary: ₹{minSalary} - {maxSalary} LPA</p>
+        <p class="salary">Estimated Salary: ₹{minSalary} - {maxSalary} LPA</p>
         <h3>About Company</h3>
-        <div className="about-company">
+        <div class="about-company">
            About us:
           <p>{job.jobDetailsFromCompany}</p>
-          <div className="gradient" ></div>
+          <div class="gradient" ></div>
         </div>
-        <div className="actions">
+        <div class="actions">
           <button onClick={toggleModal} className="view-job">View Job</button>
         </div>
         <div class="info-container"> 
@@ -49,7 +48,7 @@ export default function JobCard({ job }) {
         <div class="value">{job.minExp ? job.minExp : 2} year</div>
         </div>
         <div>
-        <button className="easy-apply">⚡ Easy Apply</button>
+        <button class="easy-apply">⚡ Easy Apply</button>
         </div>
       </div>
       <JobModal job={job} isOpen={isModalOpen} onClose={toggleModal} />
