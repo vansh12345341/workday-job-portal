@@ -11,7 +11,8 @@ const JobListings = () => {
   const [offset, setOffset] = useState(0);
   const observer = useRef(null);
   const lastElementRef = useRef(); 
-
+ 
+  // getting all the filters value
   const roleFilter = useSelector(state => state.roleFilter);
   const experienceFilter = useSelector(state => state.experienceFilter);
   const companyNameFilter = useSelector(state => state.companyNameFilter);
@@ -19,6 +20,7 @@ const JobListings = () => {
   const locationFilter = useSelector(state => state.locationFilter);
   const remoteFilter = useSelector(state => state.remoteFilter);
   
+// filtering jobs according to filters we get
  useEffect(() => {
 
   console.log("remote" , remoteFilter)
@@ -37,6 +39,7 @@ const JobListings = () => {
     companyNameFilter,locationFilter, remoteFilter ,
     allJobs]);
 
+   // Effect to fetch jobs from api
   useEffect(() => {
     setLoading(true);
     const myHeaders = new Headers();
@@ -67,6 +70,7 @@ const JobListings = () => {
       });
   }, [offset]);
 
+   // method to observe last job card for infinite scrolling
   useEffect(() => {
     if (jobs.length ) {
       observer.current.unobserve(lastElementRef.current);
@@ -76,6 +80,7 @@ const JobListings = () => {
     }
   }, [jobs]);
 
+   // method to initialize intersection observer for infinite scrolling
   useEffect(() => {
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore && !loading) {
