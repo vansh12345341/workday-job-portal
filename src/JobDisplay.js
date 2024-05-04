@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import JobCard from './JobCard';
 import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
@@ -16,19 +16,26 @@ const JobListings = () => {
   const experienceFilter = useSelector(state => state.experienceFilter);
   const companyNameFilter = useSelector(state => state.companyNameFilter);
   const minimumBasePayFilter = useSelector(state => state.minimumBasePayFilter);
-
+  const locationFilter = useSelector(state => state.locationFilter);
+  const remoteFilter = useSelector(state => state.remoteFilter);
   
  useEffect(() => {
+
+  console.log("remote" , remoteFilter)
     const filteredJobs = allJobs.filter(job => {
       const roleMatches = roleFilter.length > 0 ? roleFilter.includes(job.jobRole) : true;
       const experienceMatches =  experienceFilter ? job.minExp >= parseInt(experienceFilter, 10) : true;
       const companyMatches = companyNameFilter ? job.companyName.toLowerCase().includes(companyNameFilter.toLowerCase()) : true;
       const basePayMatches = minimumBasePayFilter ? job.minJdSalary >= parseInt(minimumBasePayFilter, 10) : true;
-      return roleMatches && experienceMatches && companyMatches && basePayMatches;
+      const locationMatches = locationFilter ? job.location.toLowerCase().includes(locationFilter.toLowerCase()) : true;
+      const remoteMatches = remoteFilter === "remote" ? job.location.toLowerCase() === "remote" : remoteFilter === "inoffice" ? job.location.toLowerCase() !== "remote" : true;
+      return roleMatches && experienceMatches && companyMatches && basePayMatches && locationMatches && remoteMatches;
     });
     setJobs(filteredJobs);
 
-  }, [roleFilter, experienceFilter, minimumBasePayFilter, companyNameFilter, allJobs]);
+  }, [roleFilter, experienceFilter, minimumBasePayFilter, 
+    companyNameFilter,locationFilter, remoteFilter ,
+    allJobs]);
 
   useEffect(() => {
     setLoading(true);

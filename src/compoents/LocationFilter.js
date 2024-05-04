@@ -1,10 +1,9 @@
 import React , {useCallback, useState, useEffect}from 'react';
 import { useDispatch } from 'react-redux';
-import { setCompanyNameFilter } from '../redux/actions';
+import { setLocationFilter } from '../redux/actions';
 import "./JobFilter.css"
 
-
-export const CompanyNameFilter = () => {
+export const LocationFilter = () => {
     const [inputValue, setInputValue] = useState('');
     const dispatch = useDispatch();
   
@@ -13,7 +12,7 @@ export const CompanyNameFilter = () => {
     };
   
     const debouncedDispatch = useCallback(() => {
-      dispatch(setCompanyNameFilter(inputValue));
+      dispatch(setLocationFilter(inputValue));
     }, [dispatch, inputValue]);
   
     useEffect(() => {
@@ -25,11 +24,11 @@ export const CompanyNameFilter = () => {
     }, [inputValue, debouncedDispatch]);
 
   return (
-    <div className="company">
-      <input
-        type="text"
-        id="company-name"
-        placeholder="Search Company Name"
+    <div className="location">
+    <input
+      type="text"
+      id="company-name"
+        placeholder="Search Location"
         onChange={handleInputChange}
         style={{
           width: '100%', 

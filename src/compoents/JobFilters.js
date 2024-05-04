@@ -1,9 +1,11 @@
 import React from 'react';
-import './JobFilter.css';
+import './JobFilter.css'
 import { RoleFilter } from './RoleFilter';
 import { ExperienceFilter } from './ExperienceFilter';
 import { CompanyNameFilter } from './CompanyFilter';
 import { MinimumBasePayFilter } from './MinimumBasePayFilter';
+import { LocationFilter } from './LocationFilter';
+import { RemoteFilter } from './RemoteFilter';
 
 
 const JobFilters = () => {
@@ -12,7 +14,9 @@ const JobFilters = () => {
       <RoleFilter />
       <ExperienceFilter  />
       <MinimumBasePayFilter/>
+      <RemoteFilter />
       <CompanyNameFilter />
+      <LocationFilter />
     </form>
   );
 };

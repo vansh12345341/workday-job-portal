@@ -1,10 +1,14 @@
-import { SET_ROLE_FILTER, SET_EXPERIENCE_FILTER, SET_COMPANY_NAME_FILTER , SET_MINIMUM_BASE_PAY_FILTER} from './actions';
+
+import { SET_ROLE_FILTER, SET_EXPERIENCE_FILTER, SET_COMPANY_NAME_FILTER , 
+  SET_MINIMUM_BASE_PAY_FILTER , SET_LOCATION_FILTER , SET_REMOTE_FILTER} from './actions';
 
 const initialState = {
   roleFilter: '',
   experienceFilter: '',
   companyNameFilter: '',
-  minimumBasePayFilter: ''
+  minimumBasePayFilter: '',
+  locationFilter:'',
+  remoteFilter: ''
 };
 
 const jobFiltersReducer = (state = initialState, action) => {
@@ -28,7 +32,17 @@ const jobFiltersReducer = (state = initialState, action) => {
       return {
         ...state,
         minimumBasePayFilter: action.payload
-      };
+      };  
+      case SET_LOCATION_FILTER:
+        return {
+         ...state,
+         locationFilter: action.payload
+        };
+        case SET_REMOTE_FILTER:
+          return {
+            ...state,
+            remoteFilter: action.payload
+          }
     default:
       return state;
   }
